@@ -42,7 +42,7 @@
 
 -(void)prepareCMDeviceMotion;
 -(void)startCMDeviceMotion:(int)frequency;
--(void)capture;
+-(void)capture:(NSTimeInterval)timestamp;
 -(void)stopSensor;
 
 @end

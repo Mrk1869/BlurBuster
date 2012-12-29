@@ -127,7 +127,7 @@
 
 
 
--(void) capture{
+-(void) capture:(NSTimeInterval)timestamp{
     AVCaptureConnection *videoConnection = nil;
     for (AVCaptureConnection *connection in stillImageOutput.connections){
         for (AVCaptureInputPort *port in [connection inputPorts]){
@@ -165,7 +165,7 @@
          NSData *imageData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageSampleBuffer];
          UIImage *image = [[UIImage alloc] initWithData:imageData];
          NSLog(@"%@",image);
-         [self.delegate finishedTakePicture:image timestamp:[self getTimestamp]];
+         [self.delegate finishedTakePicture:image timestamp:timestamp];
          
 //         CFDictionaryRef attachments = CMCopyDictionaryOfAttachments(kCFAllocatorDefault,
 //                                                                     imageSampleBuffer,

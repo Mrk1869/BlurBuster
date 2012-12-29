@@ -115,7 +115,7 @@
         //this should not be in sensorValueChanged ... maybe it does not matter though
         if(_readyToTake){
             _readyToTake = false;
-            [sensorMonitor capture];
+            [sensorMonitor capture:timestamp];
             _numberOfPictures ++;
             numberOfPicturesLabel.text = [NSString stringWithFormat:@"%d",_numberOfPictures];
         }

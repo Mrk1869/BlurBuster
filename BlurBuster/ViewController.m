@@ -111,7 +111,7 @@
     if(pow(motion.rotationRate.x,2) < _threshold && pow(motion.rotationRate.y,2) < _threshold && pow(motion.rotationRate.z,2) < _threshold && pow(motion.userAcceleration.x,2) < _threshold && pow(motion.userAcceleration.y,2) < _threshold){
         if(_isRunning && _readyToTake){
             _readyToTake = false;
-            [sensorMonitor capture];
+            [sensorMonitor capture:000.0];
             _numberOfPictures ++;
             numberOfPicturesLabel.text = [NSString stringWithFormat:@"%d",_numberOfPictures];
         [fileWriter recordSensorValue:motion timestamp:timestamp];

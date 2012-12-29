@@ -113,11 +113,9 @@ NSString* const kTimestampAppendix = @"_Timestamp";
 //                                                 [Gyroscope sharedInstance].frequency]
                                   columnDescriptions:[NSArray arrayWithObjects:
                                                       @"Seconds.milliseconds since 1970",
-                                                      @"Queue size of CMController",
                                                       @"Acceleration value in x-direction",
                                                       @"Acceleration value in y-direction",
                                                       @"Acceleration value in z-direction",
-                                                      @"Label used for the current sample",
                                                       nil]
                                   ];
 }
@@ -132,26 +130,12 @@ NSString* const kTimestampAppendix = @"_Timestamp";
                                    subtitle:nil
                          columnDescriptions:[NSArray arrayWithObjects:
                                              @"Seconds.milliseconds since 1970",
-                                             @"Queue size of CMController",
                                              @"Gyro X",
                                              @"Gyro Y",
                                              @"Gyro Z",
                                              @"Roll of the device",
                                              @"Pitch of the device",
                                              @"Yaw of the device",
-                                             @"Quaternion X",
-                                             @"Quaternion Y",
-                                             @"Quaternion Z",
-                                             @"Quaternion W",
-                                             @"X-axis magnetic field in microteslas",
-                                             @"Y-axis magnetic field in microteslas",
-                                             @"Z-axis magnetic field in microteslas",
-                                             [NSString stringWithFormat:@"Magnetic field accuracy (%i: not calibrated, %i: low, %i: medium, %i: high)",
-                                              CMMagneticFieldCalibrationAccuracyUncalibrated,
-                                              CMMagneticFieldCalibrationAccuracyLow,
-                                              CMMagneticFieldCalibrationAccuracyMedium,
-                                              CMMagneticFieldCalibrationAccuracyHigh],
-                                             @"Label used for the current sample",
                                              nil]
                          ];
 }
@@ -171,18 +155,17 @@ NSString* const kTimestampAppendix = @"_Timestamp";
     if(isRecording){
     
     fprintf(accelerometerFile,
-            "%10.3f,%i,%f,%f,%f,%i\n",
+            "%10.5f,%f,%f,%f\n",
             timestampTN,
-            0,
             motionTN.userAcceleration.x,
             motionTN.userAcceleration.y,
-            motionTN.userAcceleration.z,
-            0);
+            motionTN.userAcceleration.z
+            );
     
     CMAttitude *attitude = motionTN.attitude;
     CMRotationRate rate = motionTN.rotationRate;
-    CMQuaternion quaternion = motionTN.attitude.quaternion;
-    CMCalibratedMagneticField magneticField = motionTN.magneticField;
+//    CMQuaternion quaternion = motionTN.attitude.quaternion;
+//    CMCalibratedMagneticField magneticField = motionTN.magneticField;
     
     double x = rate.x;
     double y = rate.y;
@@ -193,33 +176,24 @@ NSString* const kTimestampAppendix = @"_Timestamp";
     double yaw = attitude.yaw;
     
     fprintf(gyroFile,
-            "%10.3f,%i,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%i,%i\n",
+            "%10.5f,%f,%f,%f,%f,%f,%f\n",
             timestampTN,
-            0,
             x,
             y,
             z,
             roll,
             pitch,
-            yaw,
-            quaternion.x,
-            quaternion.y,
-            quaternion.z,
-            quaternion.w,
-            magneticField.field.x,
-            magneticField.field.y,
-            magneticField.field.z,
-            magneticField.accuracy,
-            0);
+            yaw
+            );
     }
 }
 
 -(void)recordPicture:(UIImage*)image timestamp:(NSTimeInterval)timestamp{
     if(isRecording){
-        fprintf(timestampFile, "%10.3f\n",
+        fprintf(timestampFile, "%10.5f\n",
                 timestamp);
     }
-    NSString *pictureFilePath = [NSString stringWithFormat:@"%@/%f.jpg",self.currentRecordingDirectoryForPicture,timestamp];
+    NSString *pictureFilePath = [NSString stringWithFormat:@"%@/%10.5f.jpg",self.currentRecordingDirectoryForPicture,timestamp];
     [UIImageJPEGRepresentation(image,0.7f) writeToFile:pictureFilePath atomically:YES];
     NSLog(@"%@",pictureFilePath);
 }
