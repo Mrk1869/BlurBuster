@@ -18,7 +18,7 @@
 		764F73FE163EB1530072BE9D /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 764F73FD163EB1530072BE9D /* Default@2x.png */; };
 		764F7400163EB1530072BE9D /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 764F73FF163EB1530072BE9D /* Default-568h@2x.png */; };
 		764F7403163EB1530072BE9D /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 764F7401163EB1530072BE9D /* MainStoryboard.storyboard */; };
-		764F7406163EB1530072BE9D /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 764F7405163EB1530072BE9D /* ViewController.m */; };
+		764F7406163EB1530072BE9D /* ThresholdCutterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 764F7405163EB1530072BE9D /* ThresholdCutterViewController.m */; };
 		764F740E163EB1530072BE9D /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 764F740D163EB1530072BE9D /* SenTestingKit.framework */; };
 		764F740F163EB1530072BE9D /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 764F73E9163EB1530072BE9D /* UIKit.framework */; };
 		764F7410163EB1530072BE9D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 764F73EB163EB1530072BE9D /* Foundation.framework */; };
@@ -30,7 +30,7 @@
 		764F7438163EB26C0072BE9D /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 764F7437163EB26C0072BE9D /* AVFoundation.framework */; };
 		764F743A163EB2750072BE9D /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 764F7439163EB2750072BE9D /* CoreMotion.framework */; };
 		769A4B7D16412C9800E31F8B /* SensorMonitor.m in Sources */ = {isa = PBXBuildFile; fileRef = 769A4B7C16412C9800E31F8B /* SensorMonitor.m */; };
-		769A4B8516414A5100E31F8B /* RecordSensorsDataViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 769A4B8416414A5100E31F8B /* RecordSensorsDataViewController.m */; };
+		769A4B8516414A5100E31F8B /* SensorDataRecorderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 769A4B8416414A5100E31F8B /* SensorDataRecorderViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,8 +60,8 @@
 		764F73FD163EB1530072BE9D /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		764F73FF163EB1530072BE9D /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		764F7402163EB1530072BE9D /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
-		764F7404163EB1530072BE9D /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		764F7405163EB1530072BE9D /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		764F7404163EB1530072BE9D /* ThresholdCutterViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ThresholdCutterViewController.h; sourceTree = "<group>"; };
+		764F7405163EB1530072BE9D /* ThresholdCutterViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ThresholdCutterViewController.m; sourceTree = "<group>"; };
 		764F740C163EB1530072BE9D /* BlurBusterTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BlurBusterTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		764F740D163EB1530072BE9D /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		764F7415163EB1530072BE9D /* BlurBusterTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "BlurBusterTests-Info.plist"; sourceTree = "<group>"; };
@@ -75,8 +75,8 @@
 		764F7439163EB2750072BE9D /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		769A4B7B16412C9800E31F8B /* SensorMonitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SensorMonitor.h; sourceTree = "<group>"; };
 		769A4B7C16412C9800E31F8B /* SensorMonitor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SensorMonitor.m; sourceTree = "<group>"; };
-		769A4B8316414A5100E31F8B /* RecordSensorsDataViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordSensorsDataViewController.h; sourceTree = "<group>"; };
-		769A4B8416414A5100E31F8B /* RecordSensorsDataViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordSensorsDataViewController.m; sourceTree = "<group>"; };
+		769A4B8316414A5100E31F8B /* SensorDataRecorderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SensorDataRecorderViewController.h; sourceTree = "<group>"; };
+		769A4B8416414A5100E31F8B /* SensorDataRecorderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SensorDataRecorderViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -203,10 +203,10 @@
 		768194B61641257800DFCAE3 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				764F7404163EB1530072BE9D /* ViewController.h */,
-				764F7405163EB1530072BE9D /* ViewController.m */,
-				769A4B8316414A5100E31F8B /* RecordSensorsDataViewController.h */,
-				769A4B8416414A5100E31F8B /* RecordSensorsDataViewController.m */,
+				764F7404163EB1530072BE9D /* ThresholdCutterViewController.h */,
+				764F7405163EB1530072BE9D /* ThresholdCutterViewController.m */,
+				769A4B8316414A5100E31F8B /* SensorDataRecorderViewController.h */,
+				769A4B8416414A5100E31F8B /* SensorDataRecorderViewController.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -323,9 +323,9 @@
 			files = (
 				764F73F6163EB1530072BE9D /* main.m in Sources */,
 				764F73FA163EB1530072BE9D /* AppDelegate.m in Sources */,
-				764F7406163EB1530072BE9D /* ViewController.m in Sources */,
+				764F7406163EB1530072BE9D /* ThresholdCutterViewController.m in Sources */,
 				769A4B7D16412C9800E31F8B /* SensorMonitor.m in Sources */,
-				769A4B8516414A5100E31F8B /* RecordSensorsDataViewController.m in Sources */,
+				769A4B8516414A5100E31F8B /* SensorDataRecorderViewController.m in Sources */,
 				7635A0B616424A45005058A9 /* FileWriter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

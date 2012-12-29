@@ -14,13 +14,6 @@
     self = [super init];
     if(self != nil){
         session = [[AVCaptureSession alloc] init];
-        
-//        //initialize the path for saving the picture timestamps
-//        NSArray *pathArr = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
-//                                                               NSUserDomainMask,
-//                                                               YES);
-//        timestampFile = [[pathArr objectAtIndex:0]
-//                          stringByAppendingPathComponent:@"timestamps.txt" ];
     }
     return self;
 }
@@ -47,11 +40,10 @@
     [session addOutput:stillImageOutput];
     [session startRunning];
     
-    //iOSバージョン確認
+    //Check iOS Version
     _systemVersion = [[[UIDevice currentDevice]systemVersion]floatValue];
     NSLog(@"iOS version: %f", _systemVersion);
     
-    //インスタンスの作成
     self.manager = [[CMMotionManager alloc]init];
     
     beginningOfEpoch = [[NSDate alloc]initWithTimeIntervalSince1970:0.0];
@@ -60,13 +52,13 @@
 
 -(void)startCMDeviceMotion:(int)frequency{
     
-    //センサの有無を確認
+    //Check sensor
     if(self.manager.deviceMotionAvailable){
         
-        //更新間隔の指定
+        //frequency
         self.manager.deviceMotionUpdateInterval = 1.0f/frequency;
         
-        //ハンドラ
+        //Handler
         CMDeviceMotionHandler handler = ^(CMDeviceMotion *motion, NSError *error){
             
             if (!timestampOffsetInitialized) {
@@ -80,7 +72,7 @@
             
         };
         
-        //deviceMotionの開始
+        //Start device motion
         if(5.0 < _systemVersion){
             [self.manager startDeviceMotionUpdatesUsingReferenceFrame:CMAttitudeReferenceFrameXTrueNorthZVertical toQueue:[NSOperationQueue currentQueue] withHandler:handler];
         }else{
@@ -96,7 +88,7 @@
 
 - (void)stopSensor{
     
-    //センサの停止
+    //Stop sensor
     if(4.0 < _systemVersion){
         if(self.manager.deviceMotionActive){
             [self.manager stopDeviceMotionUpdates];
@@ -140,7 +132,6 @@
     }
     
     UIDeviceOrientation curDeviceOrientation = [[UIDevice currentDevice] orientation];
-	//AVCaptureVideoOrientation avcaptureOrientation = [self avOrientationForDeviceOrientation: *curDeviceOrientation];
 	[videoConnection setVideoOrientation:curDeviceOrientation];
     
     
@@ -157,27 +148,10 @@
          
          NSLog(@"%@",imageSampleBuffer);
          
-//         //save the timestamp to file
-//         NSString* timestamp = [NSString stringWithFormat:@"%f\n", [self getTimestamp]];
-//         NSLog(timestamp);
-//         [self appendFile:timestampFile withString:timestamp];
-         
          NSData *imageData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageSampleBuffer];
          UIImage *image = [[UIImage alloc] initWithData:imageData];
          NSLog(@"%@",image);
          [self.delegate finishedTakePicture:image timestamp:timestamp];
-         
-//         CFDictionaryRef attachments = CMCopyDictionaryOfAttachments(kCFAllocatorDefault,
-//                                                                     imageSampleBuffer,
-//                                                                     kCMAttachmentMode_ShouldPropagate);
-         
-//         ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
-//         [library writeImageDataToSavedPhotosAlbum:imageData metadata:(__bridge id)attachments completionBlock:^(NSURL *assetURL, NSError *error) {
-//             
-//             if (error) {
-//                 NSLog(@"Save to camera roll failed");
-//             }
-//         }];
      }];
     
 }

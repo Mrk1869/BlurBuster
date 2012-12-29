@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  ThresholdCutterViewController.h
 //  BulerBuster
 //
 //  Created by ishimaru on 2012/10/17.
@@ -11,7 +11,7 @@
 #import "SensorMonitor.h"
 #import "FileWriter.h"
 
-@interface ViewController : UIViewController<SensorMonitorDelegate>{
+@interface ThresholdCutterViewController : UIViewController<SensorMonitorDelegate>{
     
     __weak IBOutlet UILabel *accelX;
     __weak IBOutlet UILabel *accelY;

@@ -1,5 +1,5 @@
 //
-//  RecordSensorsDataViewController.h
+//  SensorDataRecorderViewController.h
 //  BlurBuster
 //
 //  Created by ishimaru on 2012/10/31.
@@ -11,7 +11,7 @@
 #import "SensorMonitor.h"
 #import "FileWriter.h"
 
-@interface RecordSensorsDataViewController : UIViewController<SensorMonitorDelegate>{
+@interface SensorDataRecorderViewController : UIViewController<SensorMonitorDelegate>{
     
     __weak IBOutlet UILabel *accelX;
     __weak IBOutlet UILabel *accelY;

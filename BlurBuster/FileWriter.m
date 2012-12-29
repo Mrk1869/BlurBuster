@@ -64,8 +64,6 @@ NSString* const kTimestampAppendix = @"_Timestamp";
         fclose(gyroFile);
         fclose(timestampFile);
         
-//        [fileManager removeItemAtPath:self.accelerometerFileName error:NULL];
-//        [fileManager removeItemAtPath:self.gyroFileName error:NULL];
         isRecording = false;
     }
 }
@@ -78,27 +76,13 @@ NSString* const kTimestampAppendix = @"_Timestamp";
     //create the file for the record
     *file = fopen([completeFilePath UTF8String], "a");
     
-    bool isExists = [fileManager fileExistsAtPath:completeFilePath];
-    NSLog(@"%@ is exists:%d",completeFilePath, isExists);
-    
-    //write an initial header
-    //fprintf(*file, "%% %s recorded with '%s' \n %% \n",[description UTF8String],[PRODUCT_NAME UTF8String]);
-    
-    //if(subtitle){
-    //    fprintf(*file, "%s",[subtitle UTF8String]);
-    //}
-    
-    //fprintf(*file, "%% \n%% \n");
-	//fprintf(*file, "%% \n%% Column description:\n");
     for (int i = 0; i < [columnDescriptions count]; i++) {
-        //fprintf(*file, "%% ,%i: %s\n", i + 1, [[columnDescriptions objectAtIndex:i] UTF8String]);
         if([columnDescriptions count] == (i+1)){
             fprintf(*file, "%s\n",[[columnDescriptions objectAtIndex:i] UTF8String]);
         }else{
             fprintf(*file, "%s,",[[columnDescriptions objectAtIndex:i] UTF8String]);
         }
     }
-	//fprintf(*file, "%% \n%% \n");
     
     return completeFilePath;
 }
@@ -109,8 +93,6 @@ NSString* const kTimestampAppendix = @"_Timestamp";
                                             appendix:kAccelerometerFileAppendix
                                      dataDescription:@"Accelerometer data"
                                             subtitle:[NSString stringWithFormat:@"%% Sampling frequency: 50 Hz\n"]
-//                                       subtitle:[NSString stringWithFormat:@"%% Sampling frequency: %i Hz\n",
-//                                                 [Gyroscope sharedInstance].frequency]
                                   columnDescriptions:[NSArray arrayWithObjects:
                                                       @"Seconds.milliseconds since 1970",
                                                       @"Acceleration value in x-direction",
@@ -164,8 +146,6 @@ NSString* const kTimestampAppendix = @"_Timestamp";
     
     CMAttitude *attitude = motionTN.attitude;
     CMRotationRate rate = motionTN.rotationRate;
-//    CMQuaternion quaternion = motionTN.attitude.quaternion;
-//    CMCalibratedMagneticField magneticField = motionTN.magneticField;
     
     double x = rate.x;
     double y = rate.y;
@@ -194,7 +174,7 @@ NSString* const kTimestampAppendix = @"_Timestamp";
                 timestamp);
     }
     NSString *pictureFilePath = [NSString stringWithFormat:@"%@/%10.5f.jpg",self.currentRecordingDirectoryForPicture,timestamp];
-    [UIImageJPEGRepresentation(image,0.7f) writeToFile:pictureFilePath atomically:YES];
+    [UIImageJPEGRepresentation(image,0.5f) writeToFile:pictureFilePath atomically:YES];
     NSLog(@"%@",pictureFilePath);
 }
 @end

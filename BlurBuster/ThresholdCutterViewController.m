@@ -1,52 +1,44 @@
 //
-//  RecordSensorsDataViewController.m
-//  BlurBuster
+//  ThresholdCutterViewController.m
+//  BulerBuster
 //
-//  Created by ishimaru on 2012/10/31.
+//  Created by ishimaru on 2012/10/17.
 //  Copyright (c) 2012年 ishimaru. All rights reserved.
 //
 
-#import "RecordSensorsDataViewController.h"
+#import "ThresholdCutterViewController.h"
 
-@interface RecordSensorsDataViewController (){
+@interface ThresholdCutterViewController(){
     float _frequency;
-    bool _isRunning;
-    bool _readyToTake;
+    float _threshold;
     int _numberOfPictures;
+    bool _isRunning;
+    bool _isStable;
+    bool _readyToTake;
 }
 
 @end
 
-@implementation RecordSensorsDataViewController
-
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
-
+@implementation ThresholdCutterViewController
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
-    
+
     sensorMonitor = [[SensorMonitor alloc]init];
     sensorMonitor.delegate = self;
     
-    _isRunning = false;
     _readyToTake = true;
-    _frequency = 100.0;
+    _isRunning = false;
     _numberOfPictures = 0;
+    _frequency = 50.0;
+    _threshold = 0.01;
     
     [sensorMonitor prepareCMDeviceMotion];
     [sensorMonitor startCMDeviceMotion:_frequency];
     
     fileWriter = [[FileWriter alloc]init];
-    
 }
 
 
@@ -56,7 +48,6 @@
     // Dispose of any resources that can be recreated.
 }
 
-
 -(void)dealloc{
     [[UIAccelerometer sharedAccelerometer]setDelegate:nil];
 }
@@ -65,18 +56,32 @@
 - (void)viewDidUnload {
     
     [sensorMonitor stopSensor];
-    [fileWriter stopRecording];
     accelX = nil;
     accelY = nil;
     accelZ = nil;
     gyroX = nil;
     gyroY = nil;
     gyroZ = nil;
+    isStalableLabel = nil;
     attitudeRoll = nil;
     attitudePitch = nil;
     attitudeYaw = nil;
+    slider = nil;
+    isStalableView = nil;
+    thresholdSlider = nil;
     startButton = nil;
+    numberOfPicturesLabel = nil;
     [super viewDidUnload];
+}
+
+- (IBAction)slideChanged:(id)sender {
+    _frequency = slider.value;
+    [sensorMonitor startCMDeviceMotion:_frequency];
+}
+
+- (IBAction)thresholdSlideChanged:(id)sender {
+    _threshold = thresholdSlider.value;
+    [sensorMonitor startCMDeviceMotion:_frequency];
 }
 
 - (IBAction)startButtonPushed:(id)sender {
@@ -86,6 +91,7 @@
         [fileWriter startRecording];
     }else{
         _isRunning = false;
+        ;
         [startButton setTitle:@"Start" forState:UIControlStateNormal];
         [fileWriter stopRecording];
     }
@@ -101,31 +107,29 @@
     attitudeRoll.text = [NSString stringWithFormat:@"%lf",motion.attitude.roll];
     attitudePitch.text = [NSString stringWithFormat:@"%lf",motion.attitude.pitch];
     attitudeYaw.text = [NSString stringWithFormat:@"%lf",motion.attitude.yaw];
-    attitudeYaw.text = [NSString stringWithFormat:@"%lf",motion.attitude.yaw];
-    magnetX.text = [NSString stringWithFormat:@"%lf",motion.magneticField.field.x];
-    magnetY.text = [NSString stringWithFormat:@"%lf",motion.magneticField.field.y];
-    magnetZ.text = [NSString stringWithFormat:@"%lf",motion.magneticField.field.z];
     
-    if(_isRunning){
-        
-        //I put this out of _readyToTake (as otherwise we will record very little sensor values (only 2-3 Hz)
-        [fileWriter recordSensorValue:motion timestamp:timestamp];
-        
-        
-        //this should not be in sensorValueChanged ... maybe it does not matter though
-        if(_readyToTake){
+    if(pow(motion.rotationRate.x,2) < _threshold && pow(motion.rotationRate.y,2) < _threshold && pow(motion.rotationRate.z,2) < _threshold && pow(motion.userAcceleration.x,2) < _threshold && pow(motion.userAcceleration.y,2) < _threshold){
+        if(_isRunning && _readyToTake){
             _readyToTake = false;
-            [sensorMonitor capture:timestamp];
+            [sensorMonitor capture:000.0];
             _numberOfPictures ++;
             numberOfPicturesLabel.text = [NSString stringWithFormat:@"%d",_numberOfPictures];
+        [fileWriter recordSensorValue:motion timestamp:timestamp];
         }
-        
-    
+        isStalableLabel.text = @"Stable";
+        isStalableView.backgroundColor = [UIColor greenColor];
+    }else{
+        isStalableLabel.text = @"Upset";
+        isStalableView.backgroundColor = [UIColor redColor];
     }
 }
 
 -(void)finishedTakePicture:(UIImage*)image timestamp:(NSTimeInterval)timestamp{
     [fileWriter recordPicture:image timestamp:timestamp];
+    NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(trigger:) userInfo:nil repeats:NO];
+}
+
+-(void)trigger:(NSTimer*)timer{
     _readyToTake = true;
 }
 
