@@ -16,7 +16,7 @@
 @protocol SensorMonitorDelegate <NSObject>
 
 -(void)sensorValueChanged:(CMDeviceMotion *)motion timestamp:(NSTimeInterval)timestamp;
--(void)finishedTakePicture:(UIImage *)image timestamp:(NSTimeInterval)timestamp;
+-(void)finishedTakePicture:(UIImage *)image timestamp:(NSTimeInterval)timestamp exifAttachments:(CFDictionaryRef)exifAttachments;
 
 @end
 

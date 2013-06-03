@@ -8,9 +8,22 @@
 
 #import "FileWriter.h"
 
-NSString* const kAccelerometerFileAppendix = @"_Accel";
-NSString* const kGyroscopeFileAppendix = @"_Gyro";
-NSString* const kTimestampAppendix = @"_Timestamp";
+NSString* const kAccelerometerFileAppendix = @"Accel";
+NSString* const kGyroscopeFileAppendix = @"Gyro";
+NSString* const kTimestampAppendix = @"Timestamp";
+
+NSDictionary *exifDictionary;
+
+double lowPath_accelX;
+double lowPath_accelY;
+double lowPath_accelZ;
+double lowPath_gyroX;
+double lowPath_gyroY;
+double lowPath_gyroZ;
+double lowPath_gyroRoll;
+double lowPath_gyroPitch;
+double lowPath_gyroYaw;
+double filteringFactor;
 
 @implementation FileWriter
 
@@ -24,7 +37,7 @@ NSString* const kTimestampAppendix = @"_Timestamp";
     if(self != nil){
         fileManager = [[NSFileManager alloc]init];
         isRecording = false;
-        
+        filteringFactor = 0.1;
     }
     return self;
 }
@@ -45,6 +58,9 @@ NSString* const kTimestampAppendix = @"_Timestamp";
         [fileManager createDirectoryAtPath:self.currentRecordingDirectory withIntermediateDirectories:NO attributes:nil error:NULL];
         self.currentRecordingDirectoryForPicture = [[documentDirectory stringByAppendingPathComponent:self.currentFilePrefix] stringByAppendingPathComponent:@"picture"];
         [fileManager createDirectoryAtPath:self.currentRecordingDirectoryForPicture withIntermediateDirectories:NO attributes:nil error:NULL];
+        
+        //reset currentFilePrefix
+        currentFilePrefix = @"";
         
         //init files
         [self initAccelerometerFile:self.currentFilePrefix];
@@ -135,46 +151,82 @@ NSString* const kTimestampAppendix = @"_Timestamp";
 -(void)recordSensorValue:(CMDeviceMotion *)motionTN timestamp:(NSTimeInterval)timestampTN{
     
     if(isRecording){
-    
-    fprintf(accelerometerFile,
+        
+//        lowPath_accelX = (motionTN.userAcceleration.x * filteringFactor) + (lowPath_accelX * (1.0 - filteringFactor));
+//        lowPath_accelY = (motionTN.userAcceleration.x * filteringFactor) + (lowPath_accelY * (1.0 - filteringFactor));
+//        lowPath_accelZ = (motionTN.userAcceleration.x * filteringFactor) + (lowPath_accelZ * (1.0 - filteringFactor));
+//        
+//        lowPath_gyroX = (motionTN.rotationRate.x * filteringFactor) + (lowPath_gyroX * (1.0 - filteringFactor));
+//        lowPath_gyroY = (motionTN.rotationRate.y * filteringFactor) + (lowPath_gyroY * (1.0 - filteringFactor));
+//        lowPath_gyroZ = (motionTN.rotationRate.z * filteringFactor) + (lowPath_gyroZ * (1.0 - filteringFactor));
+//        
+//        lowPath_gyroRoll = (motionTN.attitude.roll * filteringFactor) + (lowPath_gyroRoll * (1.0 - filteringFactor));
+//        lowPath_gyroPitch = (motionTN.attitude.pitch * filteringFactor) + (lowPath_gyroPitch * (1.0 - filteringFactor));
+//        lowPath_gyroYaw = (motionTN.attitude.yaw * filteringFactor) + (lowPath_gyroYaw * (1.0 - filteringFactor));
+        
+//        lowPath_accelX = motionTN.userAcceleration.x - lowPath_accelX;
+//        lowPath_accelY = motionTN.userAcceleration.x - lowPath_accelY;
+//        lowPath_accelZ = motionTN.userAcceleration.x - lowPath_accelZ;
+//        lowPath_gyroX = motionTN.rotationRate.x - lowPath_gyroX;
+//        lowPath_gyroY = motionTN.rotationRate.y - lowPath_gyroY;
+//        lowPath_gyroZ = motionTN.rotationRate.z - lowPath_gyroZ;
+//        lowPath_gyroRoll = motionTN.attitude.roll - lowPath_gyroRoll;
+//        lowPath_gyroPitch = motionTN.attitude.pitch - lowPath_gyroPitch;
+//        lowPath_gyroYaw = motionTN.attitude.yaw - lowPath_gyroYaw;
+
+
+        fprintf(accelerometerFile,
+                "%10.5f,%f,%f,%f\n",
+                timestampTN,
+                lowPath_accelX,
+                lowPath_accelY,
+                lowPath_accelZ
+                );
+        
+        fprintf(gyroFile,
+                "%10.5f,%f,%f,%f,%f,%f,%f\n",
+                timestampTN,
+                lowPath_gyroX,
+                lowPath_gyroY,
+                lowPath_gyroZ,
+                lowPath_gyroRoll,
+                lowPath_gyroPitch,
+                lowPath_gyroYaw
+                );
+        
+        fprintf(accelerometerFile,
             "%10.5f,%f,%f,%f\n",
             timestampTN,
             motionTN.userAcceleration.x,
             motionTN.userAcceleration.y,
             motionTN.userAcceleration.z
-            );
-    
-    CMAttitude *attitude = motionTN.attitude;
-    CMRotationRate rate = motionTN.rotationRate;
-    
-    double x = rate.x;
-    double y = rate.y;
-    double z = rate.z;
-    
-    double roll = attitude.roll;
-    double pitch = attitude.pitch;
-    double yaw = attitude.yaw;
-    
-    fprintf(gyroFile,
-            "%10.5f,%f,%f,%f,%f,%f,%f\n",
-            timestampTN,
-            x,
-            y,
-            z,
-            roll,
-            pitch,
-            yaw
-            );
+        );
+        
+        fprintf(gyroFile,
+                "%10.5f,%f,%f,%f,%f,%f,%f\n",
+                timestampTN,
+                motionTN.rotationRate.x,
+                motionTN.rotationRate.y,
+                motionTN.rotationRate.z,
+                motionTN.attitude.roll,
+                motionTN.attitude.pitch,
+                motionTN.attitude.yaw
+                );
     }
 }
 
--(void)recordPicture:(UIImage*)image timestamp:(NSTimeInterval)timestamp{
+-(void)recordPicture:(UIImage*)image timestamp:(NSTimeInterval)timestamp exifAttachments:(CFDictionaryRef)exifAttachments{
+    
+    exifDictionary = (__bridge NSDictionary *)exifAttachments;
     if(isRecording){
-        fprintf(timestampFile, "%10.5f\n",
-                timestamp);
+        fprintf(timestampFile,
+                "%10.5f,%s,%d\n",
+                timestamp,
+                [[NSString stringWithFormat:@"%@",[exifDictionary objectForKey:@"ExposureTime"]] cString],
+                0);
+        NSString *pictureFilePath = [NSString stringWithFormat:@"%@/%10.5f.jpg",self.currentRecordingDirectoryForPicture,timestamp];
+        [UIImageJPEGRepresentation(image,0.5f) writeToFile:pictureFilePath atomically:YES];
+        NSLog(@"%@",pictureFilePath);
     }
-    NSString *pictureFilePath = [NSString stringWithFormat:@"%@/%10.5f.jpg",self.currentRecordingDirectoryForPicture,timestamp];
-    [UIImageJPEGRepresentation(image,0.5f) writeToFile:pictureFilePath atomically:YES];
-    NSLog(@"%@",pictureFilePath);
 }
 @end

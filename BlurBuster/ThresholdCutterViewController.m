@@ -124,8 +124,8 @@
     }
 }
 
--(void)finishedTakePicture:(UIImage*)image timestamp:(NSTimeInterval)timestamp{
-    [fileWriter recordPicture:image timestamp:timestamp];
+-(void)finishedTakePicture:(UIImage*)image timestamp:(NSTimeInterval)timestamp exifAttachments:(CFDictionaryRef)exifAttachments{
+    [fileWriter recordPicture:image timestamp:timestamp exifAttachments:exifAttachments];
     NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(trigger:) userInfo:nil repeats:NO];
 }
 

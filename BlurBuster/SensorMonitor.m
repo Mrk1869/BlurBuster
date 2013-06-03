@@ -151,7 +151,7 @@
          NSData *imageData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageSampleBuffer];
          UIImage *image = [[UIImage alloc] initWithData:imageData];
          NSLog(@"%@",image);
-         [self.delegate finishedTakePicture:image timestamp:timestamp];
+         [self.delegate finishedTakePicture:image timestamp:timestamp exifAttachments:exifAttachments];
      }];
     
 }

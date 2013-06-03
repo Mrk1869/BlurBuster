@@ -123,8 +123,8 @@
     }
 }
 
--(void)finishedTakePicture:(UIImage*)image timestamp:(NSTimeInterval)timestamp{
-    [fileWriter recordPicture:image timestamp:timestamp];
+-(void)finishedTakePicture:(UIImage*)image timestamp:(NSTimeInterval)timestamp exifAttachments:(CFDictionaryRef)exifAttachments{
+    [fileWriter recordPicture:image timestamp:timestamp exifAttachments:exifAttachments];
     _readyToTake = true;
 }
 

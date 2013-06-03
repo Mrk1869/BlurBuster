@@ -45,7 +45,7 @@ extern NSString* const kTimestampFileAppendix;
 -(void)startRecording;
 -(void)stopRecording;
 -(void)recordSensorValue:(CMDeviceMotion *)motionTN timestamp:(NSTimeInterval)timestampTN;
--(void)recordPicture:(UIImage*)image timestamp:(NSTimeInterval)timestamp;
+-(void)recordPicture:(UIImage*)image timestamp:(NSTimeInterval)timestamp exifAttachments:(CFDictionaryRef)exifAttachments;
 
 -(NSString *)setupTextFile:(FILE **)file withBaseFileName:(NSString *)baseFileName appendix:(NSString *)appendix dataDescription:(NSString *) description subtitle:(NSString *) subtitle columnDescriptions:(NSArray *)columnDescriptions;
 -(void)initAccelerometerFile:(NSString*)name;
