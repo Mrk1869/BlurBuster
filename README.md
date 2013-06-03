@@ -1,7 +1,7 @@
-BlurBuste
+BlurBuster
 ======================
 
-Remove motion blur by using several sensors
+Remove motion blur from pictures by using several sensors
 ------
 
 + BlurBuser with 3 sensors
